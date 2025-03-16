@@ -36,7 +36,7 @@ export default function Home() {
       {/* Header with Typing Effect */}
       <header className="w-full bg-gray-800 py-4 px-6 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
-          <img src="/favicon.ico" alt="Logo" className="w-10 h-10" />
+          <img src="/logo.svg" alt="Logo" className="w-10 h-10" />
           <h1 className="text-2xl font-bold bg-gradient-to-r from-[#432DD7] via-[#5B3FEA] to-[#7A5AFF] text-transparent bg-clip-text">
             <Typewriter
               words={["SHASHWAT SINGH"]}
@@ -54,7 +54,7 @@ export default function Home() {
       {/* Main Content */}
       <main className="flex-grow flex flex-col items-center justify-center p-6 w-full">
         <h1 className="text-4xl font-bold mb-6 text-center bg-gradient-to-r from-[#432DD7] via-[#5B3FEA] to-[#7A5AFF] text-transparent bg-clip-text">
-          AI Chatbot
+          🗨️ AI Chatbot
         </h1>
 
         <div className="w-full max-w-2xl bg-gray-800 p-6 rounded-2xl shadow-lg">
