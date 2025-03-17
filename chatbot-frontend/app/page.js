@@ -19,10 +19,10 @@ export default function Home() {
     setOutput(""); // Clear previous output
 
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/chat/`,
-        { message: input }
-      );
+      const response = await axios.post("https://personal-chatbot-n7h8.onrender.com/chat/", {
+  message: input,
+});
+
 
       setOutput(response.data.response);
     } catch (error) {
@@ -85,11 +85,20 @@ export default function Home() {
             ) : (
               <ReactMarkdown
                 components={{
+                  h1: ({ node, ...props }) => (
+                    <h1 className="text-white text-2xl font-bold mt-4 mb-2" {...props} />
+                  ),
+                  h2: ({ node, ...props }) => (
+                    <h2 className="text-[#A87CFF] text-xl font-semibold mt-3 mb-2" {...props} />
+                  ),
+                  h3: ({ node, ...props }) => (
+                    <h3 className="text-[#C099FF] text-lg font-semibold mt-2 mb-2" {...props} />
+                  ),
                   p: ({ node, ...props }) => (
                     <p className="text-white text-lg leading-relaxed" {...props} />
                   ),
                   strong: ({ node, ...props }) => (
-                    <strong className="text-[#5B3FEA] font-semibold" {...props} />
+                    <strong className="text-[#FFD700] font-semibold" {...props} />
                   ),
                   ul: ({ node, ...props }) => (
                     <ul className="list-disc list-inside text-white" {...props} />

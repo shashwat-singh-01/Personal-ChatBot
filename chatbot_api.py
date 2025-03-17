@@ -53,3 +53,5 @@ def chat_with_gemini(request: ChatRequest):
 @app.get("/")
 def read_root():
     return {"message": "🚀 Chatbot API is running!"}
+
+#uvicorn chatbot_api:app --host 0.0.0.0 --port 8000
