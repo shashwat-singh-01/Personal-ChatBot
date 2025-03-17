@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { Typewriter } from "react-simple-typewriter";
+import Image from "next/image";
 
 export default function Home() {
   const [input, setInput] = useState("");
@@ -36,7 +37,7 @@ export default function Home() {
       {/* Header with Typing Effect */}
       <header className="w-full bg-gray-800 py-4 px-6 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Logo" className="w-10 h-10" />
+          <img src="/logo.svg" alt="Logo" className="w-12 h-12" />
           <h1 className="text-2xl font-bold bg-gradient-to-r from-[#432DD7] via-[#5B3FEA] to-[#7A5AFF] text-transparent bg-clip-text">
             <Typewriter
               words={["SHASHWAT SINGH"]}
