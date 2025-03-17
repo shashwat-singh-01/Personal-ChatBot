@@ -4,11 +4,14 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from fastapi.middleware.cors import CORSMiddleware
 
+# Initialize FastAPI app
+app = FastAPI()
+
+# Enable CORS (for frontend requests)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://shashwat-personal-chatbot.vercel.app/"],  # Replace "*" with your Vercel frontend URL for security
+    allow_origins=["https://shashwat-personal-chatbot.vercel.app", "http://localhost:3000"],  # No trailing slash
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -25,18 +28,6 @@ if not API_KEY:
 # Configure Gemini API
 genai.configure(api_key=API_KEY)
 
-# Initialize FastAPI app
-app = FastAPI()
-
-# Enable CORS (for frontend requests)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Change to frontend URL in production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 # Define request model
 class ChatRequest(BaseModel):
     message: str
@@ -48,8 +39,8 @@ def chat_with_gemini(request: ChatRequest):
         model = genai.GenerativeModel("gemini-2.0-flash")
         response = model.generate_content(request.message)
 
-        response_text = response.text if hasattr(response, "text") else None
-
+        # Ensure response is valid
+        response_text = getattr(response, "text", None)
         if not response_text:
             raise HTTPException(status_code=500, detail="Gemini API did not return a response.")
 
@@ -63,4 +54,4 @@ def chat_with_gemini(request: ChatRequest):
 def read_root():
     return {"message": "🚀 Chatbot API is running!"}
 
-#uvicorn chatbot_api:app --host 0.0.0.0 --port 8000
+# Run locally with: uvicorn chatbot_api:app --host 0.0.0.0 --port 8000
