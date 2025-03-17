@@ -1,13 +1,17 @@
+import os
 import google.generativeai as genai
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import os
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 API_KEY = os.getenv("GEMINI_API_KEY")
+
+# Check if API key exists
+if not API_KEY:
+    raise ValueError("⚠️ API Key for Gemini is missing. Set GEMINI_API_KEY in the environment.")
 
 # Configure Gemini API
 genai.configure(api_key=API_KEY)
@@ -15,13 +19,13 @@ genai.configure(api_key=API_KEY)
 # Initialize FastAPI app
 app = FastAPI()
 
-# Enable CORS to allow requests from the frontend
+# Enable CORS (for frontend requests)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow requests from any origin (change to frontend URL in production)
+    allow_origins=["*"],  # Change to frontend URL in production
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Define request model
@@ -31,9 +35,20 @@ class ChatRequest(BaseModel):
 # Define chatbot response function
 @app.post("/chat/")
 def chat_with_gemini(request: ChatRequest):
-    model = genai.GenerativeModel("gemini-2.0-flash")
-    response = model.generate_content(request.message)
-    return {"response": response.text}
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(request.message)
 
-# Run FastAPI server:
-# uvicorn chatbot_api:app --host 0.0.0.0 --port 8000 --reload
+        if not response.text:
+            raise HTTPException(status_code=500, detail="Gemini API did not return a response.")
+
+        return {"response": response.text}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
+
+# Health Check Endpoint
+@app.get("/")
+def read_root():
+    return {"message": "🚀 Chatbot API is running!"}

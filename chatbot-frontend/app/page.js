@@ -19,7 +19,8 @@ export default function Home() {
     setOutput(""); // Clear previous output
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/chat/", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
+
         message: input,
       });
 
