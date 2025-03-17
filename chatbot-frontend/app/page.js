@@ -19,10 +19,10 @@ export default function Home() {
     setOutput(""); // Clear previous output
 
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL, {
-
-        message: input,
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/`,
+        { message: input }
+      );
 
       setOutput(response.data.response);
     } catch (error) {

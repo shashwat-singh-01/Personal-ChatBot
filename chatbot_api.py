@@ -22,7 +22,7 @@ app = FastAPI()
 # Enable CORS (for frontend requests)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change to frontend URL in production
+    allow_origins=["http://localhost:3000"],  # Change to frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -39,14 +39,15 @@ def chat_with_gemini(request: ChatRequest):
         model = genai.GenerativeModel("gemini-2.0-flash")
         response = model.generate_content(request.message)
 
-        if not response.text:
+        response_text = response.text if hasattr(response, "text") else None
+
+        if not response_text:
             raise HTTPException(status_code=500, detail="Gemini API did not return a response.")
 
-        return {"response": response.text}
+        return {"response": response_text}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-
 
 # Health Check Endpoint
 @app.get("/")
